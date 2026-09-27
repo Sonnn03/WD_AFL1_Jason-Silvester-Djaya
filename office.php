@@ -1,28 +1,25 @@
 <?php
-require("controller.php"); // pakai session & fungsi getAllMembers() dari sistem Member List
+require("controller.php");
 
-// Inisialisasi data Office (kosong -- sambungkan ke model Office kamu sendiri jika sudah ada)
 if (!isset($_SESSION['officeList'])) {
     $_SESSION['officeList'] = [];
 }
 
-// Inisialisasi data pasangan Office-Employee (kosong)
 if (!isset($_SESSION['officeEmployeeList'])) {
     $_SESSION['officeEmployeeList'] = [];
 }
 
-//jika button_save di klik
 if (isset($_POST['button_save'])) {
     $newAssign = [
         "employee" => $_POST['inputEmployee'],
         "office"   => $_POST['inputOffice']
     ];
     array_push($_SESSION['officeEmployeeList'], $newAssign);
-    header("Location: office.php"); // kembali ke halaman ini
+    header("Location: office.php"); 
     exit;
 }
 
-$allMembers = getAllMembers(); // Employee = data Member yang sudah terdaftar
+$allMembers = getAllMembers(); 
 ?>
 <!DOCTYPE html>
 <html lang="en">

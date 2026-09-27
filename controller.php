@@ -1,9 +1,8 @@
 <?php
 
 include("model.php");
-session_start(); //memulai session
+session_start(); 
 
-//create session member list if not exist
 if (!isset($_SESSION['memberList'])) {
     $_SESSION['memberList'] = array();
 }
@@ -20,7 +19,7 @@ function createMember()
 
 function updateMember($memberID)
 {
-    $member = $_SESSION['memberList'][$memberID]; // ambil data dengan index tertentu
+    $member = $_SESSION['memberList'][$memberID]; 
     $member->name = $_POST['inputName'];
     $member->phone = $_POST['inputPhone'];
     $member->email = $_POST['inputEmail'];
@@ -34,7 +33,7 @@ function getAllMembers()
 
 function deleteMember($memberIndex)
 {
-    unset($_SESSION['memberList'][$memberIndex]); // array index = 0, 1, 2
+    unset($_SESSION['memberList'][$memberIndex]); 
 }
 
 function getMemberWithID($memberID)
@@ -45,17 +44,17 @@ function getMemberWithID($memberID)
 //jika button_register di klik
 if (isset($_POST['button_register'])) {
     createMember();
-    header("Location: view.php"); // kembali ke halaman lain
+    header("Location: view.php");
 }
 
 //jika button_delete di klik
 if (isset($_GET['deleteID'])) {
     deleteMember($_GET['deleteID']);
-    header("Location: view.php"); // kembali ke halaman lain
+    header("Location: view.php"); 
 }
 
 //jika button_update di klik
 if (isset($_POST['button_update'])) {
     updateMember($_POST['input_id']);
-    header("Location: view.php"); // kembali ke halaman lain
+    header("Location: view.php"); 
 }
