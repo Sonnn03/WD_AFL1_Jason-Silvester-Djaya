@@ -1,6 +1,5 @@
 <?php
 
-// Employee (sebelumnya: name, phone, email, note)
 class model
 {
     public $name;
@@ -8,7 +7,6 @@ class model
     public $usia;
 }
 
-// Office (baru)
 class Office
 {
     public $name;

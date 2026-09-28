@@ -1,19 +1,17 @@
 <?php
 
 include("model.php");
-session_start(); //memulai session
+session_start();
 
-//create session member list if not exist
 if (!isset($_SESSION['memberList'])) {
     $_SESSION['memberList'] = array();
 }
 
-//create session office list if not exist
 if (!isset($_SESSION['officeList'])) {
     $_SESSION['officeList'] = array();
 }
 
-/* ---------- EMPLOYEE ---------- */
+/*  EMPLOYEE  */
 
 function createMember()
 {
@@ -47,7 +45,7 @@ function getMemberWithID($memberID)
     return $_SESSION['memberList'][$memberID];
 }
 
-/* ---------- OFFICE ---------- */
+/*  OFFICE  */
 
 function createOffice()
 {
@@ -69,24 +67,24 @@ function deleteOffice($officeIndex)
     unset($_SESSION['officeList'][$officeIndex]);
 }
 
-/* ---------- HANDLER ---------- */
+/*  HANDLER  */
 
 //jika button_register di klik
 if (isset($_POST['button_register'])) {
     createMember();
-    header("Location: view.php"); // kembali ke halaman lain
+    header("Location: view.php");
 }
 
 //jika button_delete di klik
 if (isset($_GET['deleteID'])) {
     deleteMember($_GET['deleteID']);
-    header("Location: view.php"); // kembali ke halaman lain
+    header("Location: view.php");
 }
 
 //jika button_update di klik
 if (isset($_POST['button_update'])) {
     updateMember($_POST['input_id']);
-    header("Location: view.php"); // kembali ke halaman lain
+    header("Location: view.php");
 }
 
 //jika button_register_office di klik
