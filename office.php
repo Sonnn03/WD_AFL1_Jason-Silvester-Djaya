@@ -1,10 +1,6 @@
 <?php
 require("controller.php");
 
-if (!isset($_SESSION['officeList'])) {
-    $_SESSION['officeList'] = [];
-}
-
 if (!isset($_SESSION['officeEmployeeList'])) {
     $_SESSION['officeEmployeeList'] = [];
 }
@@ -15,127 +11,92 @@ if (isset($_POST['button_save'])) {
         "office"   => $_POST['inputOffice']
     ];
     array_push($_SESSION['officeEmployeeList'], $newAssign);
-    header("Location: office.php"); 
+    header("Location: office.php");
     exit;
 }
 
-$allMembers = getAllMembers(); 
+$allMembers = getAllMembers();
+$allOffices = getAllOffices();
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Membership</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, sans-serif;
-            background: #ffffff;
-            margin: 0;
+        .menu-bar {
+            display: flex;
+            gap: .75rem;
+            background: #cfe6f5;
+            border: 1px solid #b9d7ea;
+            border-radius: .4rem;
+            padding: .6rem .9rem;
+            margin-bottom: .75rem;
         }
-        .box {
-            max-width: 480px;
-            margin: 30px auto;
-            border: 1px solid #bcbcbc;
-        }
-        .box-nav {
-            background: #d9edf9;
-            padding: 10px 14px;
-            font-weight: bold;
-            font-size: 14px;
-            border-bottom: 1px solid #bcbcbc;
-        }
-        .box-nav a {
-            color: #000;
+        .menu-bar a {
+            color: #6c757d;
             text-decoration: none;
         }
-        .box-nav a:hover {
-            text-decoration: underline;
+        .menu-bar a:hover {
+            color: #000;
         }
-        .box-nav .sep {
-            color: #666;
-            margin: 0 6px;
-            font-weight: normal;
+        .menu-bar a.active {
+            color: #000;
+            font-weight: 700;
         }
-        .box-body {
-            padding: 20px;
+        .main-box {
+            border: 2px solid #495057;
+            border-radius: .4rem;
+            padding: 1.5rem;
         }
-        .box-title {
+        .main-box h1 {
             text-align: center;
-            color: #3355a8;
-            font-size: 30px;
-            font-weight: bold;
-            margin: 5px 0 20px 0;
+            font-size: 2.25rem;
+            margin-bottom: 1rem;
         }
-        table.wf-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 25px;
+        .theme-blue h1 {
+            color: #2a5d7c;
         }
-        table.wf-table th, table.wf-table td {
-            border: 1px solid #a8a8a8;
-            padding: 8px 12px;
-            font-size: 14px;
-            text-align: left;
+        .theme-blue .table thead th {
+            background-color: #cfe6f5;
         }
-        table.wf-table thead th {
-            background: #8ecdf0;
-            font-weight: bold;
-        }
-        .wf-form .form-row {
+        .form-row-inline {
             display: flex;
             align-items: center;
-            margin-bottom: 12px;
+            gap: .75rem;
+            margin-bottom: .75rem;
         }
-        .wf-form label {
+        .form-row-inline label {
             width: 80px;
-            font-size: 14px;
+            margin: 0;
         }
-        .wf-form select {
-            flex: 1;
-            padding: 6px 30px 6px 10px;
-            border: 1px solid #a8a8a8;
-            border-radius: 2px;
-            background-color: #fff;
-            font-size: 14px;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='8'><polygon points='0,0 12,0 6,8' style='fill:%232196f3;'/></svg>");
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-        }
-        .wf-save-btn {
-            display: block;
-            margin: 0 auto;
-            background: #2196f3;
+        .btn-save {
+            background-color: #7dbfe9;
+            border-color: #7dbfe9;
             color: #fff;
-            border: none;
-            padding: 8px 26px;
-            border-radius: 3px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
         }
-        .wf-save-btn:hover {
-            background: #1a7fd1;
+        .btn-save:hover {
+            background-color: #5fb0e3;
+            border-color: #5fb0e3;
+            color: #fff;
         }
     </style>
+    <title>Office-Employees</title>
 </head>
 
 <body>
-    <div class="box">
-        <div class="box-nav">
-            <a href="view.php">Member List</a>
-            <span class="sep">|</span>
-            <a href="updatemember.php">New Member</a>
-            <span class="sep">|</span>
-            <a href="office.php">Office Employees</a>
+    <div class="container p-3">
+        <div class="menu-bar">
+            <a href="view.php">Employee</a>
+            <a href="viewoffice.php">Office</a>
+            <a href="office.php" class="active">Office-Employees</a>
         </div>
-        <div class="box-body">
-            <div class="box-title">Office Employees</div>
 
-            <table class="wf-table">
+        <div class="main-box theme-blue">
+            <h1>Office Employees</h1>
+            <table class="table table-bordered mb-4">
                 <thead>
                     <tr>
                         <th>Employee</th>
@@ -144,34 +105,37 @@ $allMembers = getAllMembers();
                 </thead>
                 <tbody>
                     <?php foreach ($_SESSION['officeEmployeeList'] as $item) { ?>
-                    <tr>
-                        <td><?= $item['employee'] ?></td>
-                        <td><?= $item['office'] ?></td>
-                    </tr>
+                        <tr>
+                            <td><?= $item['employee'] ?></td>
+                            <td><?= $item['office'] ?></td>
+                        </tr>
                     <?php } ?>
                 </tbody>
             </table>
 
-            <form method="POST" action="office.php" class="wf-form">
-                <div class="form-row">
+            <form method="POST" action="office.php">
+                <div class="form-row-inline">
                     <label for="inputEmployee">Employee</label>
-                    <select name="inputEmployee" id="inputEmployee">
+                    <select class="form-select" name="inputEmployee" id="inputEmployee">
                         <?php foreach ($allMembers as $member) { ?>
-                        <option value="<?= $member->name ?>"><?= $member->name ?></option>
+                            <option value="<?= $member->name ?>"><?= $member->name ?></option>
                         <?php } ?>
                     </select>
                 </div>
-                <div class="form-row">
+                <div class="form-row-inline">
                     <label for="inputOffice">Office</label>
-                    <select name="inputOffice" id="inputOffice">
-                        <?php foreach ($_SESSION['officeList'] as $off) { ?>
-                        <option value="<?= $off ?>"><?= $off ?></option>
+                    <select class="form-select" name="inputOffice" id="inputOffice">
+                        <?php foreach ($allOffices as $off) { ?>
+                            <option value="<?= $off->name ?>"><?= $off->name ?></option>
                         <?php } ?>
                     </select>
                 </div>
-                <button name="button_save" type="submit" class="wf-save-btn">SAVE</button>
+                <div class="text-center">
+                    <button name="button_save" type="submit" class="btn btn-save">SAVE</button>
+                </div>
             </form>
         </div>
     </div>
 </body>
+
 </html>
